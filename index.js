@@ -35,8 +35,7 @@ export default class Carousel extends Component {
         decelerationRate: PropTypes.number,
         automaticallyAdjustContentInsets: PropTypes.bool,
         pagingEnabled: PropTypes.bool,
-
-
+        overScrollMode: PropTypes.string,
     };
 
     static defaultProps = {
@@ -53,6 +52,7 @@ export default class Carousel extends Component {
         decelerationRate: 0.9,
         automaticallyAdjustContentInsets: false,
         pagingEnabled: false,
+        overScrollMode: 'never',
     };
 
     constructor(props) {
@@ -194,7 +194,16 @@ export default class Carousel extends Component {
     }
 
     render() {
-        const { sneak, pageWidth, isBounce, automaticallyAdjustContentInsets, pagingEnabled } = this.props;
+        const {
+            sneak,
+            pageWidth,
+            isBounce,
+            automaticallyAdjustContentInsets,
+            pagingEnabled,
+            overScrollMode,
+            decelerationRate,
+        } = this.props;
+
         const { gap } = this.state;
         const computedStyles = StyleSheet.create({
             scrollView: {
@@ -243,16 +252,19 @@ export default class Carousel extends Component {
         return (
             <View style={[ styles.container, this.props.containerStyle ]}>
                 <ScrollView
-                    automaticallyAdjustContentInsets={ automaticallyAdjustContentInsets }
-                    bounces={isBounce}
                     contentContainerStyle={ [ computedStyles.scrollView ] }
                     style={{ flexDirection: (I18nManager && I18nManager.isRTL) ? 'row-reverse' : 'row' }}
-                    decelerationRate={ 0.9 }
                     horizontal
                     onScrollEndDrag={ this._handleScrollEnd }
                     ref={ c => this.scrollView = c }
                     showsHorizontalScrollIndicator={ false }
                     pagingEnabled={pagingEnabled}
+                    // for iOS
+                    automaticallyAdjustContentInsets={ automaticallyAdjustContentInsets }
+                    bounces={isBounce}
+                    decelerationRate={ decelerationRate }
+                    // for Android
+                    overScrollMode={overScrollMode} // for Android
                 >
                     { body }
                 </ScrollView>
