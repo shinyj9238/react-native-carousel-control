@@ -32,6 +32,11 @@ export default class Carousel extends Component {
         currentPage: PropTypes.number,
         swipeThreshold: PropTypes.number,
         isBounce: PropTypes.bool,
+        decelerationRate: PropTypes.number,
+        automaticallyAdjustContentInsets: PropTypes.bool,
+        pagingEnabled: PropTypes.bool,
+
+
     };
 
     static defaultProps = {
@@ -45,6 +50,9 @@ export default class Carousel extends Component {
         currentPage: 0,
         swipeThreshold: 0.5,
         isBounce: true,
+        decelerationRate: 0.9,
+        automaticallyAdjustContentInsets: false,
+        pagingEnabled: false,
     };
 
     constructor(props) {
@@ -186,7 +194,7 @@ export default class Carousel extends Component {
     }
 
     render() {
-        const { sneak, pageWidth, isBounce } = this.props;
+        const { sneak, pageWidth, isBounce, automaticallyAdjustContentInsets, pagingEnabled } = this.props;
         const { gap } = this.state;
         const computedStyles = StyleSheet.create({
             scrollView: {
@@ -235,7 +243,7 @@ export default class Carousel extends Component {
         return (
             <View style={[ styles.container, this.props.containerStyle ]}>
                 <ScrollView
-                    automaticallyAdjustContentInsets={ false }
+                    automaticallyAdjustContentInsets={ automaticallyAdjustContentInsets }
                     bounces={isBounce}
                     contentContainerStyle={ [ computedStyles.scrollView ] }
                     style={{ flexDirection: (I18nManager && I18nManager.isRTL) ? 'row-reverse' : 'row' }}
@@ -244,6 +252,7 @@ export default class Carousel extends Component {
                     onScrollEndDrag={ this._handleScrollEnd }
                     ref={ c => this.scrollView = c }
                     showsHorizontalScrollIndicator={ false }
+                    pagingEnabled={pagingEnabled}
                 >
                     { body }
                 </ScrollView>
