@@ -30,7 +30,8 @@ export default class Carousel extends Component {
         sneak: PropTypes.number,
         transitionDelay: PropTypes.number,
         currentPage: PropTypes.number,
-        swipeThreshold: PropTypes.number
+        swipeThreshold: PropTypes.number,
+        isBounce: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -42,7 +43,8 @@ export default class Carousel extends Component {
         noItemsText: "Sorry, there are currently \n no items available",
         transitionDelay: 0,
         currentPage: 0,
-        swipeThreshold: 0.5
+        swipeThreshold: 0.5,
+        isBounce: true,
     };
 
     constructor(props) {
@@ -184,7 +186,7 @@ export default class Carousel extends Component {
     }
 
     render() {
-        const { sneak, pageWidth } = this.props;
+        const { sneak, pageWidth, isBounce } = this.props;
         const { gap } = this.state;
         const computedStyles = StyleSheet.create({
             scrollView: {
@@ -234,7 +236,7 @@ export default class Carousel extends Component {
             <View style={[ styles.container, this.props.containerStyle ]}>
                 <ScrollView
                     automaticallyAdjustContentInsets={ false }
-                    bounces
+                    bounces={isBounce}
                     contentContainerStyle={ [ computedStyles.scrollView ] }
                     style={{ flexDirection: (I18nManager && I18nManager.isRTL) ? 'row-reverse' : 'row' }}
                     decelerationRate={ 0.9 }
